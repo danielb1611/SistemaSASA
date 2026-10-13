@@ -114,3 +114,27 @@ function departamentos(PDO $pdo): array
 {
     return $pdo->query('SELECT nombre FROM departamentos ORDER BY nombre')->fetchAll(PDO::FETCH_COLUMN);
 }
+
+const MENSAJES_POR_HORA = 10;
+
+function contar_mensajes_sin_leer(PDO $pdo): int
+{
+    return (int) $pdo->query('SELECT COUNT(*) FROM mensajes WHERE leido = 0 AND archivado = 0')->fetchColumn();
+}
+
+function contar_respuestas_nuevas(PDO $pdo, int $usuarioId): int
+{
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM mensajes WHERE usuario_id = ? AND respuesta IS NOT NULL AND respuesta_vista = 0 AND archivado = 0');
+    $stmt->execute([$usuarioId]);
+
+    return (int) $stmt->fetchColumn();
+}
+
+function contar_buzon(PDO $pdo, int $usuarioId, ?string $rol): int
+{
+    if ($rol === 'admin') {
+        return contar_mensajes_sin_leer($pdo);
+    }
+
+    return contar_respuestas_nuevas($pdo, $usuarioId);
+}

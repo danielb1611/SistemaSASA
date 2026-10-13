@@ -990,3 +990,84 @@ a:hover {
         flex: 1 1 100%;
     }
 }
+
+.badge--count {
+    margin-left: 6px;
+    padding: 1px 7px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 0.7rem;
+}
+
+.badge--nuevo {
+    background: rgba(220, 38, 38, 0.14);
+    color: #dc2626;
+}
+
+.badge--leido {
+    background: rgba(8, 145, 178, 0.14);
+    color: var(--user);
+}
+
+.badge--respondido {
+    background: rgba(22, 163, 74, 0.14);
+    color: #16a34a;
+}
+
+.badge--archivado {
+    background: #eef2f7;
+    color: var(--text-soft);
+}
+
+.buzon-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.buzon-remitente {
+    white-space: normal;
+}
+
+.buzon-detalle__meta {
+    white-space: pre-line;
+    color: var(--text-soft);
+    font-size: 0.85rem;
+    margin: 0 0 16px;
+}
+
+.buzon-detalle__bloque {
+    margin-bottom: 18px;
+}
+
+.buzon-detalle__texto {
+    margin: 6px 0 0;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    resize: vertical;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}

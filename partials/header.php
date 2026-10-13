@@ -4,6 +4,14 @@ $nombreHeader = $_SESSION['nombre'] ?? '';
 $esAdminHeader = ($_SESSION['rol'] ?? '') === 'admin';
 $paginaActual = basename($_SERVER['PHP_SELF']);
 
+if (!isset($pdo)) {
+    require __DIR__ . '/../config/db.php';
+}
+
+$buzonCount = is_logged_in()
+    ? contar_buzon($pdo, (int) ($_SESSION['user_id'] ?? 0), $_SESSION['rol'] ?? null)
+    : 0;
+
 $menuModulos = [];
 foreach (MODULOS as $clave => $label) {
     if (puede_ver($clave)) {
@@ -35,6 +43,7 @@ $iconosMenu = [
             <?php endif; ?>
             <?= e($esAdminHeader ? 'Administrador' : 'Usuario') ?>
         </span>
+        <a href="mensajes.php" class="btn btn--blue is-active btn--icon" aria-label="Buzon<?= $buzonCount > 0 ? ': ' . e((string) $buzonCount) . ' sin leer' : '' ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>Buzon<?php if ($buzonCount > 0): ?><span class="badge badge--count"><?= e((string) $buzonCount) ?></span><?php endif; ?></a>
         <?php if ($esAdminHeader): ?>
             <a href="admin.php" class="btn btn--blue is-active btn--icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Departamentos | Usuarios</a>
         <?php endif; ?>
