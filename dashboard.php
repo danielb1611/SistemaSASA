@@ -55,7 +55,7 @@ $buzonCount = contar_buzon($pdo, (int) $usuario['id'], $usuario['rol']);
                     </p>
                 </div>
                 <div class="section-head__tools">
-                    <a href="mensajes.php" class="btn btn--blue btn--icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><?= $esAdminDash ? 'Ver mensajes' : 'Enviar mensaje' ?></a>
+                    <a href="mensajes.php" class="btn btn--blue btn--icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><?= $esAdminDash ? 'Ver mensajes' : 'Mensajes' ?></a>
                     <?php if ($buzonCount > 0): ?>
                         <span class="badge badge--nuevo"><?= e((string) $buzonCount) ?> nuevo(s)</span>
                     <?php endif; ?>
