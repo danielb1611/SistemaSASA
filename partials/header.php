@@ -92,7 +92,7 @@ $iconosMenu = [
     <div class="modal__backdrop"></div>
     <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-perfil-titulo">
         <header class="modal__header">
-            <h2 class="card__title" id="modal-perfil-titulo">Mis datos</h2>
+            <h2 class="card__title card__title--icon" id="modal-perfil-titulo"><svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Datos</h2>
             <button type="button" class="modal__close" data-modal-close aria-label="Cerrar">&times;</button>
         </header>
 
