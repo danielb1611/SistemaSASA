@@ -31,8 +31,9 @@ if (!csrf_validate($_POST['csrf_token'] ?? null)) {
 $asunto = trim((string) ($_POST['asunto'] ?? ''));
 $cuerpo = trim((string) ($_POST['cuerpo'] ?? ''));
 
-if (mb_strlen($asunto) > 150) {
-    json_out(false, 'El asunto no puede superar los 150 caracteres.');
+$lenAsunto = mb_strlen($asunto);
+if ($lenAsunto < 1 || $lenAsunto > 150) {
+    json_out(false, 'El asunto debe tener entre 1 y 150 caracteres.');
 }
 
 $lenCuerpo = mb_strlen($cuerpo);

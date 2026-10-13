@@ -233,7 +233,7 @@ require __DIR__ . '/partials/header.php';
             <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
             <div class="field">
                 <label for="mensaje-asunto">Asunto</label>
-                <input type="text" id="mensaje-asunto" name="asunto" maxlength="150" autocomplete="off" placeholder="Opcional">
+                <input type="text" id="mensaje-asunto" name="asunto" maxlength="150" autocomplete="off" placeholder="Tema del mensaje" required>
             </div>
             <div class="field">
                 <label for="mensaje-cuerpo">Mensaje</label>
@@ -411,6 +411,13 @@ require __DIR__ . '/partials/header.php';
                 event.preventDefault();
                 var error = document.getElementById('nuevo-mensaje-error');
                 error.hidden = true;
+
+                var asunto = document.getElementById('mensaje-asunto').value.trim();
+                if (asunto.length < 1) {
+                    error.textContent = 'Escribi el asunto del mensaje.';
+                    error.hidden = false;
+                    return;
+                }
 
                 var cuerpo = document.getElementById('mensaje-cuerpo').value.trim();
                 if (cuerpo.length < 1) {
