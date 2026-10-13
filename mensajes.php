@@ -289,6 +289,7 @@ require __DIR__ . '/partials/header.php';
                     <textarea id="ver-respuesta-input" name="respuesta" rows="4" maxlength="2000" class="textarea" placeholder="Escribi la respuesta al usuario..."></textarea>
                 </div>
                 <div class="form__actions">
+                    <button type="button" class="btn btn--outline btn--sm" data-modal-close>Cancelar</button>
                     <button type="submit" class="btn btn--primary" id="ver-responder-btn">Enviar respuesta</button>
                 </div>
             </form>
