@@ -32,13 +32,13 @@ $asunto = trim((string) ($_POST['asunto'] ?? ''));
 $cuerpo = trim((string) ($_POST['cuerpo'] ?? ''));
 
 $lenAsunto = mb_strlen($asunto);
-if ($lenAsunto < 1 || $lenAsunto > 150) {
-    json_out(false, 'El asunto debe tener entre 1 y 150 caracteres.');
+if ($lenAsunto < 1 || $lenAsunto > 50) {
+    json_out(false, 'El asunto debe tener entre 1 y 50 caracteres.');
 }
 
 $lenCuerpo = mb_strlen($cuerpo);
-if ($lenCuerpo < 1 || $lenCuerpo > 2000) {
-    json_out(false, 'El mensaje debe tener entre 1 y 2000 caracteres.');
+if ($lenCuerpo < 1 || $lenCuerpo > 100) {
+    json_out(false, 'El mensaje debe tener entre 1 y 100 caracteres.');
 }
 
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM mensajes WHERE usuario_id = ? AND creado_en > (NOW() - INTERVAL 1 HOUR)');

@@ -233,12 +233,12 @@ require __DIR__ . '/partials/header.php';
             <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
             <div class="field">
                 <label for="mensaje-asunto">Asunto</label>
-                <input type="text" id="mensaje-asunto" name="asunto" maxlength="150" autocomplete="off" placeholder="Tema del mensaje" required>
+                <input type="text" id="mensaje-asunto" name="asunto" maxlength="50" autocomplete="off" placeholder="Tema del mensaje" required>
             </div>
             <div class="field">
                 <label for="mensaje-cuerpo">Mensaje</label>
-                <textarea id="mensaje-cuerpo" name="cuerpo" rows="6" maxlength="2000" class="textarea" placeholder="Escribi tu mensaje al administrador..." required></textarea>
-                <small class="field__hint">Maximo 2000 caracteres.</small>
+                <textarea id="mensaje-cuerpo" name="cuerpo" rows="6" maxlength="100" class="textarea" placeholder="Escribi tu mensaje al administrador..." required></textarea>
+                <small class="field__hint">Maximo 100 caracteres.</small>
             </div>
             <div class="form__actions">
                 <button type="button" class="btn btn--outline" data-modal-close>Cancelar</button>
