@@ -41,7 +41,7 @@ $iconosMenu = [
             <?php else: ?>
                 <svg class="badge__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <?php endif; ?>
-            <?= e($esAdminHeader ? 'Administrador' : 'Usuario') ?>
+            <?= e($nombreHeader) ?>
         </span>
         <a href="mensajes.php" class="btn btn--blue is-active btn--icon" aria-label="Buzon<?= $buzonCount > 0 ? ': ' . e((string) $buzonCount) . ' sin leer' : '' ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>Buzon<?php if ($buzonCount > 0): ?><span class="badge badge--count"><?= e((string) $buzonCount) ?></span><?php endif; ?></a>
         <?php if ($esAdminHeader): ?>
