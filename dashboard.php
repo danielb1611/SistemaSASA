@@ -41,7 +41,7 @@ $buzonCount = contar_buzon($pdo, (int) $usuario['id'], $usuario['rol']);
         <section class="card card--wide">
             <div class="section-head">
                 <div>
-                    <h2 class="card__title card__title--icon"><svg class="card__title-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>Hola, <?= e($usuario['nombre']) ?></h2>
+                    <h2 class="card__title card__title--icon"><svg class="card__title-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>Hola, <?= e(mb_strtoupper($usuario['nombre'], 'UTF-8')) ?></h2>
                     <p class="card__subtitle">
                         <?php if ($esAdminDash): ?>
                             <?= $buzonCount > 0
