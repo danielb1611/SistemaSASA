@@ -34,7 +34,7 @@ if (!csrf_validate($_POST['csrf_token'] ?? null)) {
     json_out(false, 'Sesion invalida. Recarga la pagina e intenta de nuevo.');
 }
 
-$stmt = $pdo->query('DELETE FROM mensajes');
+$stmt = $pdo->query("DELETE FROM mensajes WHERE respuesta IS NOT NULL AND respuesta <> ''");
 $eliminados = $stmt->rowCount();
 
-json_out(true, 'Buzon vaciado.', (int) $eliminados);
+json_out(true, 'Mensajes respondidos eliminados.', (int) $eliminados);

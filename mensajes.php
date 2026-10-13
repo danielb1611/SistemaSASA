@@ -20,9 +20,9 @@ if (!$actual) {
 $esAdmin = $actual['rol'] === 'admin';
 $usuarioId = (int) $actual['id'];
 
-$hayMensajesBuzon = false;
+$hayRespondidos = false;
 if ($esAdmin) {
-    $hayMensajesBuzon = (int) $pdo->query('SELECT COUNT(*) FROM mensajes')->fetchColumn() > 0;
+    $hayRespondidos = (int) $pdo->query("SELECT COUNT(*) FROM mensajes WHERE respuesta IS NOT NULL AND respuesta <> ''")->fetchColumn() > 0;
 }
 
 $busqueda = trim((string) ($_GET['q'] ?? ''));
@@ -126,7 +126,7 @@ require __DIR__ . '/partials/header.php';
             </div>
             <div class="section-head__tools">
                 <?php if ($esAdmin): ?>
-                    <button type="button" class="btn btn--red btn--icon" data-modal-open="modal-vaciar-buzon"<?= $hayMensajesBuzon ? '' : ' title="No hay mensajes para eliminar" disabled' ?>><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Eliminar</button>
+                    <button type="button" class="btn btn--red btn--icon" data-modal-open="modal-vaciar-buzon"<?= $hayRespondidos ? '' : ' title="No hay mensajes respondidos para eliminar" disabled' ?>><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Eliminar</button>
                 <?php endif; ?>
                 <?php if (!$esAdmin): ?>
                     <button type="button" class="btn btn--blue btn--icon" data-modal-open="modal-nuevo-mensaje"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>Nuevo mensaje</button>
@@ -308,7 +308,7 @@ require __DIR__ . '/partials/header.php';
 
         <div class="alert alert--error" id="vaciar-buzon-error" role="alert" hidden></div>
 
-        <p class="buzon-detalle__texto">Esta accion elimina de forma permanente <strong>todos</strong> los mensajes del buzon. No se puede deshacer.</p>
+        <p class="buzon-detalle__texto">Esta accion elimina de forma permanente <strong>solo</strong> los mensajes que ya fueron respondidos. Los pendientes se conservan. No se puede deshacer.</p>
 
         <div class="form__actions form__actions--confirm">
             <button type="button" class="btn btn--outline" data-modal-close>Cancelar</button>
