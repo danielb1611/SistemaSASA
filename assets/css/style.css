@@ -155,6 +155,10 @@ a:hover {
     gap: 10px;
 }
 
+.form__actions--confirm {
+    margin-top: 20px;
+}
+
 .dep-actions {
     margin-top: 20px;
 }

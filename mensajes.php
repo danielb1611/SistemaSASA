@@ -305,7 +305,7 @@ require __DIR__ . '/partials/header.php';
 
         <p class="buzon-detalle__texto">Esta accion elimina de forma permanente <strong>todos</strong> los mensajes del buzon. No se puede deshacer.</p>
 
-        <div class="form__actions">
+        <div class="form__actions form__actions--confirm">
             <button type="button" class="btn btn--outline" data-modal-close>Cancelar</button>
             <button type="button" class="btn btn--red" id="vaciar-buzon-btn">Vaciar buzon</button>
         </div>
