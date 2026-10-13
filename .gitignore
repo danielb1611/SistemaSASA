@@ -1,0 +1,7 @@
+# Config local de opencode con credenciales (token de GitHub) - NO subir
+opencode.json
+
+# Temporales
+*.log
+Thumbs.db
+.DS_Store
