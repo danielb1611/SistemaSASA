@@ -376,7 +376,7 @@ require __DIR__ . '/partials/header.php';
 
             if (esAdmin) {
                 document.getElementById('ver-mensaje-id').value = d.id;
-                document.getElementById('ver-respuesta-input').value = d.respuesta ? d.respuesta : '';
+                document.getElementById('ver-respuesta-input').value = '';
                 if (!d.leido) {
                     post('marcar_mensaje.php', { id: d.id, campo: 'leido', valor: 1 });
                 }
