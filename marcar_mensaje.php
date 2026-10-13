@@ -81,14 +81,4 @@ if ($campo === 'respuesta_vista') {
     json_out(true, 'Respuesta vista.', $id);
 }
 
-if ($campo === 'archivado') {
-    if (!$esAdmin && !$esDuenio) {
-        json_out(false, 'No tenes permisos para esta accion.');
-    }
-
-    $pdo->prepare('UPDATE mensajes SET archivado = ? WHERE id = ?')->execute([$valor, $id]);
-
-    json_out(true, $valor === 1 ? 'Mensaje archivado.' : 'Mensaje restaurado.', $id);
-}
-
 json_out(false, 'Accion invalida.');

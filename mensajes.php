@@ -28,7 +28,6 @@ $filtros = [
     'sin_leer'    => 'Sin leer',
     'leidos'      => 'Leidos',
     'respondidos' => 'Respondidos',
-    'archivados'  => 'Archivados',
 ];
 
 if (!array_key_exists($estado, $filtros)) {
@@ -42,19 +41,14 @@ if ($esAdmin) {
 
     switch ($estado) {
         case 'sin_leer':
-            $condiciones[] = 'm.archivado = 0 AND m.leido = 0';
+            $condiciones[] = 'm.leido = 0';
             break;
         case 'leidos':
-            $condiciones[] = 'm.archivado = 0 AND m.leido = 1';
+            $condiciones[] = 'm.leido = 1';
             break;
         case 'respondidos':
-            $condiciones[] = 'm.archivado = 0 AND m.respuesta IS NOT NULL';
+            $condiciones[] = 'm.respuesta IS NOT NULL';
             break;
-        case 'archivados':
-            $condiciones[] = 'm.archivado = 1';
-            break;
-        default:
-            $condiciones[] = 'm.archivado = 0';
     }
 
     $params = [];
@@ -64,16 +58,21 @@ if ($esAdmin) {
         array_push($params, $like, $like, $like, $like, $like);
     }
 
-    $sql = 'SELECT m.id, m.asunto, m.cuerpo, m.leido, m.respuesta, m.respondido_en, m.creado_en, m.archivado, '
+    $sql = 'SELECT m.id, m.asunto, m.cuerpo, m.leido, m.respuesta, m.respondido_en, m.creado_en, '
         . 'u.nombre AS remitente_nombre, u.apellido AS remitente_apellido, u.departamento AS remitente_departamento, u.email AS remitente_email '
-        . 'FROM mensajes m JOIN usuarios u ON u.id = m.usuario_id '
-        . 'WHERE ' . implode(' AND ', $condiciones) . ' ORDER BY m.creado_en DESC';
+        . 'FROM mensajes m JOIN usuarios u ON u.id = m.usuario_id';
+
+    if ($condiciones) {
+        $sql .= ' WHERE ' . implode(' AND ', $condiciones);
+    }
+
+    $sql .= ' ORDER BY m.creado_en DESC';
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $mensajes = $stmt->fetchAll();
 } else {
-    $condiciones = ['m.usuario_id = ?', 'm.archivado = 0'];
+    $condiciones = ['m.usuario_id = ?'];
     $params = [$usuarioId];
 
     if ($busqueda !== '') {
@@ -81,7 +80,7 @@ if ($esAdmin) {
         array_push($params, $like, $like);
     }
 
-    $sql = 'SELECT m.id, m.asunto, m.cuerpo, m.leido, m.respuesta, m.respuesta_vista, m.respondido_en, m.creado_en, m.archivado, '
+    $sql = 'SELECT m.id, m.asunto, m.cuerpo, m.leido, m.respuesta, m.respuesta_vista, m.respondido_en, m.creado_en, '
         . 'a.nombre AS admin_nombre, a.apellido AS admin_apellido '
         . 'FROM mensajes m LEFT JOIN usuarios a ON a.id = m.respondido_por '
         . 'WHERE ' . implode(' AND ', $condiciones) . ' ORDER BY m.creado_en DESC';
@@ -91,12 +90,8 @@ if ($esAdmin) {
     $mensajes = $stmt->fetchAll();
 }
 
-function estado_mensaje(array $fila, bool $esAdmin): array
+function estado_mensaje(array $fila): array
 {
-    if (!empty($fila['archivado'])) {
-        return ['Archivado', 'badge--archivado'];
-    }
-
     if ($fila['respuesta'] !== null && $fila['respuesta'] !== '') {
         return ['Respondido', 'badge--respondido'];
     }
@@ -173,7 +168,7 @@ require __DIR__ . '/partials/header.php';
                     <tbody>
                         <?php foreach ($mensajes as $fila): ?>
                             <?php
-                            [$etiquetaEstado, $claseEstado] = estado_mensaje($fila, $esAdmin);
+                            [$etiquetaEstado, $claseEstado] = estado_mensaje($fila);
                             $esNueva = !$esAdmin && !empty($fila['respuesta']) && empty($fila['respuesta_vista']);
                             $datos = [
                                 'id' => (int) $fila['id'],
@@ -183,7 +178,6 @@ require __DIR__ . '/partials/header.php';
                                 'leido' => (int) $fila['leido'],
                                 'respuesta' => $fila['respuesta'],
                                 'respondido_en' => $fila['respondido_en'],
-                                'archivado' => (int) $fila['archivado'],
                                 'es_admin' => $esAdmin,
                             ];
                             if ($esAdmin) {
@@ -212,11 +206,6 @@ require __DIR__ . '/partials/header.php';
                                 </td>
                                 <td class="cell-actions">
                                     <button type="button" class="btn btn--outline btn--sm" data-modal-open="modal-ver-mensaje" data-ver="<?= e(json_encode($datos, JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP)) ?>">Ver</button>
-                                    <?php if ($fila['archivado']): ?>
-                                        <button type="button" class="btn btn--blue btn--sm" data-archivar="<?= e((string) $fila['id']) ?>" data-valor="0">Restaurar</button>
-                                    <?php else: ?>
-                                        <button type="button" class="btn btn--danger btn--sm" data-archivar="<?= e((string) $fila['id']) ?>" data-valor="1">Archivar</button>
-                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -509,26 +498,6 @@ require __DIR__ . '/partials/header.php';
                 });
             }
         }
-
-        document.querySelectorAll('[data-archivar]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var id = btn.getAttribute('data-archivar');
-                var valor = btn.getAttribute('data-valor');
-                btn.disabled = true;
-                post('marcar_mensaje.php', { id: id, campo: 'archivado', valor: valor }).then(function (data) {
-                    if (!data.ok) {
-                        btn.disabled = false;
-                        mostrarAviso(data.mensaje, true);
-                        return;
-                    }
-                    mostrarAviso(valor === '1' ? 'Mensaje archivado.' : 'Mensaje restaurado.', false);
-                    setTimeout(function () { window.location.reload(); }, 700);
-                }).catch(function () {
-                    btn.disabled = false;
-                    mostrarAviso('Error de conexion. Intenta de nuevo.', true);
-                });
-            });
-        });
     })();
 </script>
 <?php require __DIR__ . '/partials/footer.php'; ?>

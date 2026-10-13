@@ -1014,11 +1014,6 @@ a:hover {
     color: #16a34a;
 }
 
-.badge--archivado {
-    background: #eef2f7;
-    color: var(--text-soft);
-}
-
 .buzon-filtros {
     display: flex;
     flex-wrap: wrap;

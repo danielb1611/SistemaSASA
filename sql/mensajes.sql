@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS mensajes (
   respondido_por  INT           NULL,
   respondido_en   TIMESTAMP     NULL,
   respuesta_vista TINYINT(1)    NOT NULL DEFAULT 0,
-  archivado       TINYINT(1)    NOT NULL DEFAULT 0,
   creado_en       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_mensajes_usuario
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
@@ -19,6 +18,5 @@ CREATE TABLE IF NOT EXISTS mensajes (
     FOREIGN KEY (respondido_por) REFERENCES usuarios(id) ON DELETE SET NULL,
   INDEX idx_mensajes_usuario (usuario_id),
   INDEX idx_mensajes_leido (leido),
-  INDEX idx_mensajes_archivado (archivado),
   INDEX idx_mensajes_spam (usuario_id, creado_en)
 );
