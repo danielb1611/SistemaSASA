@@ -498,6 +498,34 @@ require __DIR__ . '/partials/header.php';
                 });
             }
         }
+
+        document.querySelectorAll('.search-form--table').forEach(function (buscarForm) {
+            var buscarBtn = buscarForm.querySelector('button[type="submit"]');
+            var buscarInput = buscarForm.querySelector('input[type="search"]');
+            if (!buscarBtn) {
+                return;
+            }
+
+            if (buscarInput) {
+                var actualizarBotonBuscar = function () {
+                    buscarBtn.disabled = buscarInput.value.trim().length < 1;
+                };
+                buscarInput.addEventListener('input', actualizarBotonBuscar);
+                actualizarBotonBuscar();
+            }
+
+            buscarForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                if (buscarBtn.classList.contains('is-loading')) {
+                    return;
+                }
+                buscarBtn.classList.add('is-loading');
+                buscarBtn.innerHTML = '<span class="btn__spinner" aria-hidden="true"></span>Buscando...';
+                setTimeout(function () {
+                    buscarForm.submit();
+                }, 1000);
+            });
+        });
     })();
 </script>
 <?php require __DIR__ . '/partials/footer.php'; ?>
