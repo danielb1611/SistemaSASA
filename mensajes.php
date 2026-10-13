@@ -289,7 +289,6 @@ require __DIR__ . '/partials/header.php';
                     <textarea id="ver-respuesta-input" name="respuesta" rows="4" maxlength="2000" class="textarea" placeholder="Escribi la respuesta al usuario..."></textarea>
                 </div>
                 <div class="form__actions">
-                    <button type="button" class="btn btn--outline btn--sm" id="ver-marcar-no-leido">Marcar como no leido</button>
                     <button type="submit" class="btn btn--primary" id="ver-responder-btn">Enviar respuesta</button>
                 </div>
             </form>
@@ -516,23 +515,6 @@ require __DIR__ . '/partials/header.php';
                     error.hidden = false;
                 });
             });
-
-            var btnNoLeido = document.getElementById('ver-marcar-no-leido');
-            if (btnNoLeido) {
-                btnNoLeido.addEventListener('click', function () {
-                    post('marcar_mensaje.php', {
-                        id: document.getElementById('ver-mensaje-id').value,
-                        campo: 'leido',
-                        valor: 0
-                    }).then(function (data) {
-                        if (data.ok) {
-                            cerrarModal(document.getElementById('modal-ver-mensaje'));
-                            mostrarAviso('Marcado como no leido.', false);
-                            setTimeout(function () { window.location.reload(); }, 800);
-                        }
-                    });
-                });
-            }
         }
 
         var btnVaciar = document.getElementById('vaciar-buzon-btn');
