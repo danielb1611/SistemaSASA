@@ -111,8 +111,8 @@ a:hover {
     color: #64748b;
 }
 
-.card--wide > .card__title--buzon {
-    color: var(--text);
+.dashboard .section-head .card__title {
+    color: #64748b;
 }
 
 .modal__dialog .card__title {
