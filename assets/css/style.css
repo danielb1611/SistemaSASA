@@ -705,8 +705,8 @@ a:hover {
 }
 
 .topbar .badge {
-    padding: 2px 7px;
-    font-size: 0.61rem;
+    padding: 4px 10px;
+    font-size: 0.8rem;
 }
 
 .badge--admin {
