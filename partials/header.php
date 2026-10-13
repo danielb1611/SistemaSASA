@@ -98,7 +98,6 @@ $iconosMenu = [
 
         <dl class="perfil-lista">
             <div class="perfil-lista__item">
-                <dt class="field__label">Nombre y apellido</dt>
                 <dd><?= e(trim((string) $perfilHeader['nombre'] . ' ' . (string) $perfilHeader['apellido'])) ?></dd>
             </div>
             <div class="perfil-lista__item">
