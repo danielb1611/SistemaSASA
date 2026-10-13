@@ -12,9 +12,9 @@ $buzonCount = is_logged_in()
     ? contar_buzon($pdo, (int) ($_SESSION['user_id'] ?? 0), $_SESSION['rol'] ?? null)
     : 0;
 
-$perfilHeader = ['nombre' => $nombreHeader, 'apellido' => '', 'departamento' => '', 'email' => ''];
+$perfilHeader = ['nombre' => $nombreHeader, 'apellido' => '', 'departamento' => '', 'email' => '', 'rol' => $_SESSION['rol'] ?? 'usuario'];
 if (is_logged_in()) {
-    $stmtPerfil = $pdo->prepare('SELECT nombre, apellido, departamento, email FROM usuarios WHERE id = ? LIMIT 1');
+    $stmtPerfil = $pdo->prepare('SELECT nombre, apellido, departamento, email, rol FROM usuarios WHERE id = ? LIMIT 1');
     $stmtPerfil->execute([(int) ($_SESSION['user_id'] ?? 0)]);
     $filaPerfil = $stmtPerfil->fetch();
     if ($filaPerfil) {
@@ -99,6 +99,15 @@ $iconosMenu = [
         <dl class="perfil-lista">
             <div class="perfil-lista__item">
                 <dd><?= e(mb_strtoupper(trim((string) $perfilHeader['nombre'] . ' ' . (string) $perfilHeader['apellido']), 'UTF-8')) ?></dd>
+            </div>
+            <div class="perfil-lista__item">
+                <dt class="field__label">Rol</dt>
+                <dd>
+                    <?php $rolPerfil = $perfilHeader['rol'] ?? ($_SESSION['rol'] ?? 'usuario'); ?>
+                    <span class="badge badge--<?= $rolPerfil === 'admin' ? 'admin' : 'user' ?>">
+                        <?= e($rolPerfil === 'admin' ? 'Administrador' : 'Usuario') ?>
+                    </span>
+                </dd>
             </div>
             <div class="perfil-lista__item">
                 <dt class="field__label">Departamento</dt>

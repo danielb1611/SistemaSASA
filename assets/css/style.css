@@ -730,8 +730,8 @@ a:hover {
 }
 
 .badge--user {
-    background: rgba(8, 145, 178, 0.14);
-    color: var(--user);
+    background: rgba(124, 58, 237, 0.14);
+    color: var(--admin);
 }
 
 .topbar .badge--user {
