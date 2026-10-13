@@ -713,6 +713,12 @@ a:hover {
     font-size: 0.8rem;
 }
 
+.topbar .badge--btn {
+    font-family: inherit;
+    border: 0;
+    cursor: pointer;
+}
+
 .badge--admin {
     background: rgba(124, 58, 237, 0.14);
     color: var(--admin);
@@ -731,6 +737,18 @@ a:hover {
 .topbar .badge--user {
     background: rgba(5, 142, 197, 0.14);
     color: #058ec5;
+}
+
+.perfil-lista {
+    margin: 0;
+}
+
+.perfil-lista__item {
+    margin-bottom: 14px;
+}
+
+.perfil-lista__item dd {
+    margin: 4px 0 0;
 }
 
 .table-wrap {

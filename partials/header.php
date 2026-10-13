@@ -12,6 +12,16 @@ $buzonCount = is_logged_in()
     ? contar_buzon($pdo, (int) ($_SESSION['user_id'] ?? 0), $_SESSION['rol'] ?? null)
     : 0;
 
+$perfilHeader = ['nombre' => $nombreHeader, 'apellido' => '', 'departamento' => '', 'email' => ''];
+if (is_logged_in()) {
+    $stmtPerfil = $pdo->prepare('SELECT nombre, apellido, departamento, email FROM usuarios WHERE id = ? LIMIT 1');
+    $stmtPerfil->execute([(int) ($_SESSION['user_id'] ?? 0)]);
+    $filaPerfil = $stmtPerfil->fetch();
+    if ($filaPerfil) {
+        $perfilHeader = $filaPerfil;
+    }
+}
+
 $menuModulos = [];
 foreach (MODULOS as $clave => $label) {
     if (puede_ver($clave)) {
@@ -35,14 +45,14 @@ $iconosMenu = [
         <img class="topbar__logo" src="LogoEmpresa.png?v=<?= e((string) @filemtime(__DIR__ . '/../LogoEmpresa.png')) ?>" alt="Logo Empresa">
     </a>
     <nav class="topbar__nav">
-        <span class="badge badge--<?= $esAdminHeader ? 'admin' : 'user' ?>">
+        <button type="button" class="badge badge--<?= $esAdminHeader ? 'admin' : 'user' ?> badge--btn" id="btn-perfil" aria-label="Ver mis datos">
             <?php if ($esAdminHeader): ?>
                 <svg class="badge__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
             <?php else: ?>
                 <svg class="badge__icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <?php endif; ?>
             <?= e($nombreHeader) ?>
-        </span>
+        </button>
         <a href="mensajes.php" class="btn btn--blue is-active btn--icon" aria-label="Mensajes<?= $buzonCount > 0 ? ': ' . e((string) $buzonCount) . ' sin leer' : '' ?>"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg><?php if ($buzonCount > 0): ?><span class="badge badge--count"><?= e((string) $buzonCount) ?></span><?php endif; ?></a>
         <?php if ($esAdminHeader): ?>
             <a href="admin.php" class="btn btn--blue is-active btn--icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Administrar</a>
@@ -75,6 +85,55 @@ $iconosMenu = [
             setTimeout(function () {
                 window.location.href = 'logout.php';
             }, 2000);
+        });
+    })();
+</script>
+<div class="modal" id="modal-perfil" data-modal>
+    <div class="modal__backdrop"></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-perfil-titulo">
+        <header class="modal__header">
+            <h2 class="card__title" id="modal-perfil-titulo">Mis datos</h2>
+            <button type="button" class="modal__close" data-modal-close aria-label="Cerrar">&times;</button>
+        </header>
+
+        <dl class="perfil-lista">
+            <div class="perfil-lista__item">
+                <dt class="field__label">Nombre y apellido</dt>
+                <dd><?= e(trim((string) $perfilHeader['nombre'] . ' ' . (string) $perfilHeader['apellido'])) ?></dd>
+            </div>
+            <div class="perfil-lista__item">
+                <dt class="field__label">Departamento</dt>
+                <dd><?= e((string) $perfilHeader['departamento'] !== '' ? $perfilHeader['departamento'] : 'Sin departamento') ?></dd>
+            </div>
+            <div class="perfil-lista__item">
+                <dt class="field__label">Correo</dt>
+                <dd><?= e((string) $perfilHeader['email']) ?></dd>
+            </div>
+        </dl>
+    </div>
+</div>
+<script>
+    (function () {
+        var btnPerfil = document.getElementById('btn-perfil');
+        var modalPerfil = document.getElementById('modal-perfil');
+        if (!btnPerfil || !modalPerfil) {
+            return;
+        }
+        btnPerfil.addEventListener('click', function () {
+            modalPerfil.classList.add('is-open');
+        });
+        modalPerfil.querySelectorAll('[data-modal-close]').forEach(function (el) {
+            el.addEventListener('click', function () {
+                modalPerfil.classList.remove('is-open');
+            });
+        });
+        modalPerfil.querySelector('.modal__backdrop').addEventListener('click', function () {
+            modalPerfil.classList.remove('is-open');
+        });
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                modalPerfil.classList.remove('is-open');
+            }
         });
     })();
 </script>
