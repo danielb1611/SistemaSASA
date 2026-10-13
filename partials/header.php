@@ -98,7 +98,7 @@ $iconosMenu = [
 
         <dl class="perfil-lista">
             <div class="perfil-lista__item">
-                <dd><?= e(trim((string) $perfilHeader['nombre'] . ' ' . (string) $perfilHeader['apellido'])) ?></dd>
+                <dd><?= e(mb_strtoupper(trim((string) $perfilHeader['nombre'] . ' ' . (string) $perfilHeader['apellido']), 'UTF-8')) ?></dd>
             </div>
             <div class="perfil-lista__item">
                 <dt class="field__label">Departamento</dt>
